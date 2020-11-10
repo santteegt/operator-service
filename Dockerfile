@@ -1,26 +1,43 @@
-FROM python:3.6-alpine
+# FROM python:3.6-alpine
+FROM ubuntu:18.04
 LABEL maintainer="Ocean Protocol <devops@oceanprotocol.com>"
 
 ARG VERSION
 
-RUN apk add --no-cache --update\
-    build-base \
+# RUN apk add --no-cache --update\
+#     build-base \
+#     gcc \
+#     gettext\
+#     gmp \
+#     gmp-dev \
+#     libffi-dev \
+#     openssl-dev \
+#     py-pip \
+#     python3 \
+#     python3-dev \
+#     postgresql-dev \
+#   && pip install virtualenv
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
     gcc \
-    gettext\
-    gmp \
-    gmp-dev \
+    gettext \
+    # gmp \
+    libgmp-dev \
     libffi-dev \
-    openssl-dev \
-    py-pip \
-    python3 \
-    python3-dev \
-    postgresql-dev \
-  && pip install virtualenv
+    # openssl-dev \
+    libssl-dev \
+    # py-pip \
+    python3.6 \
+    python3-pip \
+    python3.6-dev \
+    postgresql-server-dev-all
 
 COPY . /operator-service
 WORKDIR /operator-service
 
-RUN pip install .
+RUN python3.6 -m pip install setuptools
+RUN python3.6 -m pip install .
 
 # config.ini configuration file variables
 ENV OPERATOR_URL='http://0.0.0.0:8050'
